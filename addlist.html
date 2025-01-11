@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Listing - Real Estate</title>
-    
+    <title>Add Property Listing</title>
     <link rel="stylesheet" href="./assets/css/add.css">
 </head>
 <body>
     <div class="container">
         <h1>Add Property Listing</h1>
-        <form action="https://api.web3forms.com/submit" method="POST" >
-            <input type="hidden" name="access_key" value="8f5c927f-8d92-4530-b0e3-944b3cacaada">
+        <form id="addListingForm" enctype="multipart/form-data">
+
             <label for="title">Property Title:</label>
             <input type="text" id="title" name="title" placeholder="Enter property title" required>
 
@@ -20,7 +19,7 @@
 
             <label for="type">Property Type:</label>
             <select id="type" name="type" required>
-                <option value="">Select Type</option>
+                <option value="" disabled selected>Select Type</option>
                 <option value="house">House</option>
                 <option value="apartment">Apartment</option>
                 <option value="commercial">Commercial Space</option>
@@ -39,7 +38,7 @@
             <input type="number" id="bathrooms" name="bathrooms" min="0" placeholder="Number of bathrooms">
 
             <label for="images">Upload Images:</label>
-            <input type="file" id="images" name="images[]" multiple>
+            <input type="file" id="images" name="images" multiple accept="image/*">
 
             <label for="contact">Contact Information:</label>
             <input type="text" id="contact" name="contact" placeholder="Enter your contact details" required>
@@ -47,5 +46,39 @@
             <button type="submit">Submit Listing</button>
         </form>
     </div>
+
+    <script>
+        // JavaScript to handle form submission
+        document.getElementById('addListingForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const form = event.target;
+            const formData = new FormData(form); // Collect all form data, including files
+
+            try {
+                // Send the form data to the backend
+                const response = await fetch('http://localhost:3000/api/listings', {
+                    method: 'POST',
+                    body: formData, // FormData includes files and text data
+                });
+
+                // Debugging response
+                console.log('Response status:', response.status);
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert('Property listing added successfully!'); // Show success message
+                    form.reset(); // Reset the form after submission
+                } else {
+                    console.error('Error response:', result);
+                    alert(`Failed to add listing: ${result.message || 'Unknown error'}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert(`Error: ${error.message}`);
+            }
+        });
+    </script>
 </body>
 </html>

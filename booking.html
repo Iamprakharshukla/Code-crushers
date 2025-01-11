@@ -9,62 +9,81 @@
 <body>
     <div class="container">
         <h1>Book a Meeting</h1>
-        <form class="bookingForm" action="https://api.web3forms.com/submit" method="post">
-            <input type="hidden" name="access_key" value="8f5c927f-8d92-4530-b0e3-944b3cacaada">
-            
-                <label for="name">Full Name:</label>
-                <input type="text" id="name" name="name" placeholder="Enter your name" required>
-           
-                <label for="email">Email Address:</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required>
-           
-                <label for="phone">Phone Number:</label>
-                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
-          
-                <label for="property">Property of Interest:</label>
-                <select id="property" name="property" required>
-                    <option value="" disabled selected>Select a property</option>
-                    <option value="property1">Mandhana,Kanpur</option>
-                    <option value="property2">Mohan Nagar ,Gahziabad</option>
-                    <option value="property3">Gomti Nagar,Lucknow</option>
-                    <option value="property4">Assi Ghat,Varanasi</option>
-                </select>
-         
-                <label for="meetingType">Meeting Type:</label>
-                <select id="meetingType" name="meetingType" required>
-                    <option value="in-person">in-person</option>
-                    <option value="virtual">Virtual</option>
-                
-                </select>
-            
-            
-                <label for="date">Preferred Date & Time:</label>
-                <input type="datetime-local" id="date" name="date" required>
-           
-            
-                <label for="dealer">Preferred Dealer:</label>
-                <select id="dealer" name="dealer" required>
-                    <option value="any">Assign to any available dealer</option>
-                    <option value="Dealer 1">Pratyush Mishra</option>
-                    <option value="Dealer 2">Mayank Rana</option>
-                    <option value="Dealer 3">Prince Kumar</option>
-                    <option value="Dealer 4">Adarsh Dubey</option>
-                
-                </select>
-            
-                <label for="notes">Additional Notes (Optional):</label>
-                <textarea id="notes" name="notes" rows="4" placeholder="Add any extra information..."></textarea>
-            
+        <form class="bookingForm" id="bookingForm">
 
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+           
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+           
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+          
+            <label for="property">Property of Interest:</label>
+            <select id="property" name="property" required>
+                <option value="" disabled selected>Select a property</option>
+                <option value="Mandhana,Kanpur">Mandhana,Kanpur</option>
+                <option value="Mohan Nagar ,Gahziabad">Mohan Nagar, Gahziabad</option>
+                <option value="Gomti Nagar,Lucknow">Gomti Nagar, Lucknow</option>
+                <option value="Assi Ghat,Varanasi">Assi Ghat, Varanasi</option>
+            </select>
+         
+            <label for="meetingType">Meeting Type:</label>
+            <select id="meetingType" name="meetingType" required>
+                <option value="in-person">In-person</option>
+                <option value="virtual">Virtual</option>
+            </select>
+            
+            <label for="date">Preferred Date & Time:</label>
+            <input type="datetime-local" id="date" name="date" required>
+           
+            <label for="dealer">Preferred Dealer:</label>
+            <select id="dealer" name="dealer" required>
+                <option value="any">Assign to any available dealer</option>
+                <option value="Pratyush Mishra">Pratyush Mishra</option>
+                <option value="Mayank Rana">Mayank Rana</option>
+                <option value="Prince Kumar">Prince Kumar</option>
+                <option value="Adarsh Dubey">Adarsh Dubey</option>
+            </select>
+            
+            <label for="notes">Additional Notes (Optional):</label>
+            <textarea id="notes" name="notes" rows="4" placeholder="Add any extra information..."></textarea>
+            
             <button type="submit">Confirm Booking</button>
         </form>
     </div>
 
-    <!-- <script>
-        document.getElementById('bookingForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            alert('Meeting booked successfully!');
+    <script>
+        // JavaScript to handle form submission
+        document.getElementById('bookingForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            
+            // Collect form data
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries()); // Convert to JSON
+            
+            try {
+                // Send the form data to the backend
+                const response = await fetch('http://localhost:3000/api/bookings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    alert(result.message); // Show success message
+                    event.target.reset(); // Reset the form
+                } else {
+                    throw new Error(result.message || 'Failed to save booking.');
+                }
+            } catch (error) {
+                alert(`Error: ${error.message}`); // Show error message
+            }
         });
-    </script> -->
+    </script>
 </body>
 </html>
