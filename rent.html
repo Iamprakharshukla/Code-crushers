@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RENT PROPERTIES</title>
+    <style>
+        :root {
+            --orange-soda: hsl(9, 100%, 62%);
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            position: relative;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--orange-soda);
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .filter {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .header-bottom-actions-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border: none;
+            background: none;
+            color: var(--orange-soda);
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .header-bottom-actions-btn ion-icon {
+            font-size: 30px;
+        }
+
+        .properties {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .property {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .property img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .property-details {
+            padding: 15px;
+        }
+
+        .property-title {
+            font-size: 18px;
+            margin: 0 0 10px;
+        }
+
+        .property-price {
+            font-size: 16px;
+            color: #f76227;
+            font-weight: bold;
+        }
+
+        .property-location {
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>RENT PROPERTIES</h1>
+        <div class="filters">
+            <div class="filter">
+                <label for="state">State</label>
+                <select id="state">
+                    <option value="">All States</option>
+                    <option value="UTTAR_PRADESH">Uttar Pradesh</option>
+                    <option value="DELHI">Delhi</option>
+                    <option value="RAJASTHAN">Rajasthan</option>
+                </select>
+            </div>
+
+            <div class="filter">
+                <label for="location">District</label>
+                <select id="location">
+                    <option value="">All Districts</option>
+                </select>
+            </div>
+
+            <div class="filter">
+                <button class="header-bottom-actions-btn" id="search-button" aria-label="Search">
+                    <ion-icon name="search-outline"></ion-icon>
+                </button>
+            </div>
+        </div>
+
+        <div class="properties" id="properties">
+            <!-- Property cards will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+       const stateDistrictMap = {
+    "UTTAR_PRADESH": [
+        "Agra", "Aligarh", "Allahabad", "Ambedkar Nagar", "Amethi", "Amroha",
+        "Auraiya", "Azamgarh", "Baghpat", "Bahraich", "Ballia", "Balrampur",
+        "Banda", "Barabanki", "Bareilly", "Basti", "Bijnor", "Budaun", "Bulandshahr",
+        "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad", "Farrukhabad",
+        "Fatehpur", "Firozabad", "Gautam Buddha Nagar", "Ghaziabad", "Ghazipur",
+        "Gonda", "Gorakhpur", "Hamirpur", "Hapur", "Hardoi", "Hathras", "Jalaun",
+        "Jaunpur", "Jhansi", "Kannauj", "Kanpur Dehat", "Kanpur Nagar", "Kasganj",
+        "Kaushambi", "Kushinagar", "Lakhimpur Kheri", "Lalitpur", "Lucknow", "Maharajganj",
+        "Mahoba", "Mainpuri", "Mathura", "Mau", "Meerut", "Mirzapur", "Moradabad",
+        "Muzaffarnagar", "Pilibhit", "Pratapgarh", "Raebareli", "Rampur", "Saharanpur",
+        "Sambhal", "Sant Kabir Nagar", "Sant Ravidas Nagar", "Shahjahanpur", "Shamli",
+        "Shravasti", "Siddharthnagar", "Sitapur", "Sonbhadra", "Sultanpur", "Unnao",
+        "Varanasi"
+    ],
+    "RAJASTHAN": [
+        "Ajmer", "Alwar", "Banswara", "Baran", "Barmer", "Bharatpur", "Bhilwara", 
+        "Bikaner", "Bundi", "Chittorgarh", "Churu", "Dausa", "Dholpur", "Dungarpur", 
+        "Hanumangarh", "Jaipur", "Jaisalmer", "Jalore", "Jhalawar", "Jhunjhunu", 
+        "Jodhpur", "Karauli", "Kota", "Nagaur", "Pali", "Pratapgarh", "Rajsamand", 
+        "Sawai Madhopur", "Sikar", "Sirohi", "Sri Ganganagar", "Tonk", "Udaipur"
+    ],
+    "DELHI": [
+        "Central Delhi", "East Delhi", "New Delhi", "North Delhi", "North East Delhi", 
+        "North West Delhi", "Shahdara", "South Delhi", "South East Delhi", "South West Delhi", 
+        "West Delhi", "North West Delhi"
+    ]
+};
+
+        const properties = [
+            { id: 1, title: "Cozy Apartment in Lucknow", price: 20000, location: "Lucknow", state: "UTTAR_PRADESH", image: "./assets/images/property-1.jpg", description: "A cozy apartment located in Lucknow, ideal for small families." },
+            { id: 2, title: "Spacious Villa in Jaipur", price: 40000, location: "Jaipur", state: "RAJASTHAN", image: "./assets/images/property-2.jpg", description: "A spacious villa in Jaipur with all modern amenities." },
+            { id: 3, title: "Compact Studio in South Delhi", price: 25000, location: "South Delhi", state: "DELHI", image: "./assets/images/property-3.jpg", description: "Compact and affordable studio in South Delhi, perfect for professionals." },
+        ];
+
+        const stateDropdown = document.getElementById("state");
+        const districtDropdown = document.getElementById("location");
+        const searchButton = document.getElementById("search-button");
+        const propertiesContainer = document.getElementById("properties");
+
+        stateDropdown.addEventListener("change", () => {
+            const selectedState = stateDropdown.value;
+            districtDropdown.innerHTML = '<option value="">All Districts</option>';
+
+            if (selectedState && stateDistrictMap[selectedState]) {
+                stateDistrictMap[selectedState].forEach(district => {
+                    const option = document.createElement("option");
+                    option.value = district.toUpperCase();
+                    option.textContent = district;
+                    districtDropdown.appendChild(option);
+                });
+            }
+        });
+
+        function filterProperties() {
+            const state = stateDropdown.value;
+            const location = districtDropdown.value;
+
+            const filteredProperties = properties.filter(property => {
+                return (
+                    (state === "" || property.state === state) &&
+                    (location === "" || property.location.toUpperCase() === location)
+                );
+            });
+
+            displayProperties(filteredProperties);
+        }
+
+        function displayProperties(properties) {
+            propertiesContainer.innerHTML = "";
+
+            if (properties.length === 0) {
+                propertiesContainer.innerHTML = "<p>No properties found.</p>";
+                return;
+            }
+
+            properties.forEach(property => {
+                const propertyCard = document.createElement("div");
+                propertyCard.classList.add("property");
+                propertyCard.innerHTML = `
+                    <img src="${property.image}" alt="${property.title}">
+                    <div class="property-details">
+                        <h2 class="property-title">${property.title}</h2>
+                        <p class="property-price">₹${property.price.toLocaleString()}</p>
+                        <p class="property-location">${property.location}, ${property.state}</p>
+                    </div>
+                `;
+                propertiesContainer.appendChild(propertyCard);
+            });
+        }
+
+        searchButton.addEventListener("click", filterProperties);
+
+        // Initial display
+        displayProperties(properties);
+    </script>
+
+    <!-- Ionicons library -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
