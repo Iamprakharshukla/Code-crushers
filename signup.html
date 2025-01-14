@@ -10,7 +10,7 @@
     <div class="signup-container">
         <div class="signup-card">
             <h1>Create an Account</h1>
-            <form action="/signup" method="POST">
+            <form id="signupForm">
                 <label for="name">Full Name:</label>
                 <input type="text" id="name" name="name" placeholder="Enter your full name" required>
 
@@ -23,10 +23,74 @@
                 <label for="confirm-password">Confirm Password:</label>
                 <input type="password" id="confirm-password" name="confirm-password" placeholder="Re-enter your password" required>
 
+                <div class="error-message" id="errorMessage" style="color: red; display: none;"></div>
                 <button type="submit">Sign Up</button>
             </form>
             <p>Already have an account? <a href="login.html">Log in</a></p>
         </div>
     </div>
+
+    <script>
+        // JavaScript for form submission
+        const signupForm = document.getElementById('signupForm');
+        const errorMessage = document.getElementById('errorMessage');
+
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent default form submission behavior
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            // Frontend validation
+            if (password !== confirmPassword) {
+                errorMessage.textContent = 'Passwords do not match!';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            if (password.length < 6) {
+                errorMessage.textContent = 'Password must be at least 6 characters long!';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                errorMessage.textContent = 'Invalid email format!';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            errorMessage.style.display = 'none';
+
+            // Prepare data for API call
+            const requestBody = { fullName: name, email, password };
+
+            try {
+                const response = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(result.message); // Display success message
+                    window.location.href = 'login.html'; // Redirect to login page
+                } else {
+                    errorMessage.textContent = result.message || 'Failed to sign up';
+                    errorMessage.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorMessage.textContent = 'An error occurred during signup.';
+                errorMessage.style.display = 'block';
+            }
+        });
+    </script>
 </body>
 </html>

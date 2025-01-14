@@ -10,17 +10,67 @@
     <div class="login-container">
         <div class="login-card">
             <h1>Login to EstateXplorer</h1>
-            <form action="/login" method="POST">
+            <form id="loginForm">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" placeholder="Enter your email" required>
 
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" placeholder="Enter your password" required>
 
-                <button type="submit">Login</button>
+                <button type="submit" id="loginButton">Login</button>
             </form>
             <p>Don't have an account? <a href="signup.html">Sign up</a></p>
         </div>
     </div>
+
+    <script>
+        // JavaScript for form submission
+        const loginForm = document.getElementById('loginForm');
+        const loginButton = document.getElementById('loginButton');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent default form submission behavior
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Show loading indicator
+            loginButton.textContent = 'Logging in...';
+            loginButton.disabled = true;
+
+            // Prepare data for API call
+            const requestBody = { email, password };
+
+            try {
+                // Replace '/api/login' with your backend URL if needed
+                const response = await fetch('http://localhost:3000/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(result.message); // Display success message
+                    // Store token in localStorage for further authenticated requests
+                    localStorage.setItem('token', result.token);
+                    // Redirect to the dashboard or homepage
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert(result.message || 'Failed to login');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred during login');
+            } finally {
+                // Reset the button state
+                loginButton.textContent = 'Login';
+                loginButton.disabled = false;
+            }
+        });
+    </script>
 </body>
 </html>
