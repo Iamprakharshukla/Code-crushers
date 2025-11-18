@@ -1,0 +1,211 @@
+/* Google font similar to your main page */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary: #ff5a3c;        /* orange buttons */
+  --primary-dark: #e54a30;
+  --nav-bg: #ffffff;         /* white navbar like home page */
+  --bg: #f4f7fb;             /* light grey background */
+  --text-main: #102a43;      /* dark text */
+  --text-muted: #6c7a89;
+  --card-bg: #ffffff;
+  --shadow-soft: 0 10px 30px rgba(15, 42, 70, 0.08);
+  --radius-lg: 14px;
+}
+
+/* ----- GLOBAL ----- */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: var(--bg);
+  color: var(--text-main);
+}
+
+/* ----- NAVBAR (top white bar like your home page) ----- */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--nav-bg);
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 40px;
+  box-shadow: 0 4px 20px rgba(15, 42, 70, 0.06);
+}
+
+.navbar h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navbar h2::first-letter {
+  font-size: 24px;
+}
+
+.navbar .icons {
+  display: flex;
+  align-items: center;
+}
+
+.navbar .icons i {
+  margin-left: 22px;
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--text-muted);
+  transition: color 0.2s ease, transform 0.15s ease;
+}
+
+.navbar .icons i:hover {
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+/* ----- MAIN CONTENT ----- */
+
+.container {
+  max-width: 1180px;
+  margin: 30px auto 60px auto;
+  padding: 0 20px;
+}
+
+#welcome {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-main);
+}
+
+.container > p {
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+/* ----- CARDS GRID ----- */
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+}
+
+.card {
+  background: var(--card-bg);
+  padding: 20px 22px;
+  border-radius: var(--radius-lg);
+  width: 280px;
+  min-height: 150px;
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.card p {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* ----- BUTTONS ----- */
+
+.card button {
+  margin-top: 14px;
+  align-self: flex-start;
+  background: var(--primary);
+  color: #ffffff;
+  padding: 9px 18px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 6px 18px rgba(255, 90, 60, 0.4);
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.card button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(255, 90, 60, 0.55);
+}
+
+.card button:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(255, 90, 60, 0.45);
+}
+
+/* ----- FLOATING LOGOUT BUTTON ----- */
+
+#logoutBtn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #0b1f33;
+  color: #ffffff;
+  padding: 11px 20px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 8px 22px rgba(11, 31, 51, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+#logoutBtn:hover {
+  background: #132b45;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(11, 31, 51, 0.45);
+}
+
+#logoutBtn:active {
+  transform: translateY(0);
+  box-shadow: 0 5px 14px rgba(11, 31, 51, 0.45);
+}
+
+/* ----- RESPONSIVE ----- */
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 12px 18px;
+  }
+
+  .navbar h2 {
+    font-size: 18px;
+  }
+
+  .navbar .icons i {
+    margin-left: 14px;
+    font-size: 18px;
+  }
+
+  .cards {
+    justify-content: center;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 360px;
+  }
+}

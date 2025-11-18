@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Meeting</title>
+    <link rel="stylesheet" href="./assets/css/booking.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Book a Meeting</h1>
+        <form class="bookingForm" id="bookingForm">
+
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+           
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+           
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+          
+            <label for="property">Property of Interest:</label>
+            <select id="property" name="property" required>
+                <option value="" disabled selected>Select a property</option>
+                <option value="Mandhana,Kanpur">Mandhana,Kanpur</option>
+                <option value="Mohan Nagar ,Gahziabad">Mohan Nagar, Gahziabad</option>
+                <option value="Gomti Nagar,Lucknow">Gomti Nagar, Lucknow</option>
+                <option value="Assi Ghat,Varanasi">Assi Ghat, Varanasi</option>
+            </select>
+         
+            <label for="meetingType">Meeting Type:</label>
+            <select id="meetingType" name="meetingType" required>
+                <option value="in-person">In-person</option>
+                <option value="virtual">Virtual</option>
+            </select>
+            
+            <label for="date">Preferred Date & Time:</label>
+            <input type="datetime-local" id="date" name="date" required>
+           
+            <label for="dealer">Preferred Dealer:</label>
+            <select id="dealer" name="dealer" required>
+                <option value="any">Assign to any available dealer</option>
+                <option value="Pratyush Mishra">Pratyush Mishra</option>
+                <option value="Mayank Rana">Mayank Rana</option>
+                <option value="Prince Kumar">Prince Kumar</option>
+                <option value="Adarsh Dubey">Adarsh Dubey</option>
+            </select>
+            
+            <label for="notes">Additional Notes (Optional):</label>
+            <textarea id="notes" name="notes" rows="4" placeholder="Add any extra information..."></textarea>
+            
+            <button type="submit">Confirm Booking</button>
+        </form>
+    </div>
+
+   <script>
+  // Adjust IDs/names according to your actual form fields
+  const form = document.getElementById("meetingForm"); // give your form this id
+
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const fullName = document.getElementById("fullName").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const propertyId = document.getElementById("propertySelect").value || null;
+      const meetingType = document.getElementById("meetingType").value;
+      const preferredDateTime =
+        document.getElementById("preferredDateTime").value;
+      const preferredDealer =
+        document.getElementById("preferredDealer").value || null;
+      const notes = document.getElementById("notes").value || null;
+
+      try {
+        const res = await fetch("/book-meeting", {
+          method: "POST",
+          credentials: "include", // session required!
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fullName,
+            email,
+            phone,
+            propertyId,
+            meetingType,
+            preferredDateTime,
+            preferredDealer,
+            notes,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert(data.message || "Failed to book meeting");
+          return;
+        }
+
+        alert("Meeting booked successfully!");
+        // Optionally redirect:
+        // window.location.href = "my-meetings.html";
+        form.reset();
+      } catch (err) {
+        console.error("Booking error:", err);
+        alert("Something went wrong while booking your meeting.");
+      }
+    });
+  }
+</script>
+
+</body>
+</html>

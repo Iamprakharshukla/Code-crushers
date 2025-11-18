@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard - EstateXplorer</title>
+  <link rel="stylesheet" href="./assets/css/dashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <h2>🏠 EstateXplorer</h2>
+    <div class="icons">
+      <i class="fa-solid fa-house" title="Home" onclick="window.location.href='index.html'"></i>
+      <i class="fa-solid fa-list" title="My Listings" onclick="window.location.href='listing.html'"></i>
+      <i class="fa-solid fa-building" title="Rent Requests" onclick="window.location.href='rent.html'"></i>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <h1 id="welcome">Loading...</h1>
+
+    <div class="cards">
+      <div class="card">
+        <h3>🏘 Your Listed Properties</h3>
+        <p>Manage, Edit or Remove properties you listed.</p>
+        <button onclick="window.location.href='listings.html'">View Listings</button>
+      </div>
+
+      <div class="card">
+        <h3>🏘 Your Listed Properties</h3>
+        <p id="dash-listing-summary">Checking your listings...</p>
+        <button onclick="window.location.href='listings.html'">View Listings</button>
+      </div>
+
+      <div class="card">
+        <h3>🏘 Your Listed Properties</h3>
+        <p id="dash-listing-summary">Checking your listings...</p>
+        <!-- <button onclick="window.location.href='.html'">View Listings</button> -->
+      </div>
+
+
+      <div class="card">
+        <h3>📩 Rent Requests</h3>
+        <p>Check who wants to rent your property.</p>
+        <button onclick="window.location.href='rent.html'">View Requests</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGOUT BUTTON -->
+  <button id="logoutBtn">Logout</button>
+
+ <script>
+  window.addEventListener("load", async () => {
+    const welcomeEl = document.getElementById("welcome");
+    const listingSummaryEl = document.getElementById("dash-listing-summary");
+
+    // ===== 1. Load dashboard welcome text =====
+    try {
+      const res = await fetch("/dashboard", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        welcomeEl.innerText = data.message || "Welcome to your dashboard";
+      } else {
+        welcomeEl.innerText = "Welcome to your dashboard";
+      }
+    } catch (err) {
+      console.error("Dashboard error:", err);
+      welcomeEl.innerText = "Welcome to your dashboard";
+    }
+
+    // ===== 2. Load listings summary for this card =====
+    try {
+      const res2 = await fetch("/my-listings-summary", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!res2.ok) {
+        listingSummaryEl.innerText = "Could not load your listings.";
+        return;
+      }
+
+      const data2 = await res2.json();
+      const total = data2.total || 0;
+
+      if (total === 0) {
+        listingSummaryEl.innerText = "You have not added any listings yet.";
+      } else {
+        listingSummaryEl.innerText = `You have ${total} listing(s).`;
+      }
+    } catch (err) {
+      console.error("Listings summary error:", err);
+      listingSummaryEl.innerText = "Could not load your listings.";
+    }
+  });
+
+  document.getElementById("logoutBtn").addEventListener("click", async () => {
+    try {
+      await fetch("/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (err) {
+      console.error(err);
+    }
+    window.location.href = "login.html";
+  });
+</script>
+
+
+</body>
+</html>

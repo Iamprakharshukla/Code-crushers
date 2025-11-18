@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Listings - EstateXplorer</title>
+
+  <!-- same theme as other pages -->
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- page specific styles -->
+  <style>
+    body {
+      background: #f4f7fb;
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      margin: 0;
+    }
+
+    .listings-wrapper {
+      max-width: 1180px;
+      margin: 30px auto 60px auto;
+      padding: 0 20px;
+    }
+
+    .listings-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .listings-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .back-link {
+      text-decoration: none;
+      color: #ff5a3c;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #listings-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .listing-card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 10px 30px rgba(15, 42, 70, 0.08);
+    }
+
+    .listing-card h3 {
+      margin: 0 0 6px 0;
+      font-size: 18px;
+    }
+
+    .listing-location {
+      color: #6c7a89;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .listing-price {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .listing-meta {
+      font-size: 12px;
+      color: #8a94a6;
+    }
+
+    .empty-message {
+      color: #6c7a89;
+      font-size: 15px;
+      margin-top: 10px;
+    }
+  </style>
+
+  <script src="listings.js" defer></script>
+</head>
+<body>
+
+  <!-- Simple top bar like others (optional) -->
+  <header class="navbar" style="background:#ffffff; box-shadow:0 4px 20px rgba(15,42,70,0.06); padding:14px 40px; display:flex; justify-content:space-between; align-items:center;">
+    <h2 style="margin:0; font-weight:700; display:flex; align-items:center; gap:8px;">
+      🏠 EstateXplorer
+    </h2>
+    <div class="icons" style="display:flex; align-items:center;">
+      <i class="fa-solid fa-house" title="Home" style="margin-left:20px; cursor:pointer;" onclick="window.location.href='index.html'"></i>
+      <i class="fa-solid fa-gauge" title="Dashboard" style="margin-left:20px; cursor:pointer;" onclick="window.location.href='dashboard.html'"></i>
+      <i class="fa-solid fa-building" title="Rent Requests" style="margin-left:20px; cursor:pointer;" onclick="window.location.href='rent.html'"></i>
+    </div>
+  </header>
+
+  <main class="listings-wrapper">
+    <div class="listings-header">
+      <div>
+        <h1>Your Listings</h1>
+        <p id="listing-summary" class="empty-message"></p>
+      </div>
+      <a href="dashboard.html" class="back-link">
+        <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+      </a>
+    </div>
+
+    <div id="listings-container">
+      <!-- Cards will be added via JS -->
+    </div>
+  </main>
+
+  <footer style="text-align:center; padding:20px 0; font-size:13px; color:#8a94a6;">
+    © 2025 Estate Xplorer. All rights reserved.
+  </footer>
+</body>
+</html>
